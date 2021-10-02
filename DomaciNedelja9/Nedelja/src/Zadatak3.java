@@ -57,7 +57,7 @@ public class Zadatak3 {
         return result;
     }
 
-    public static String removeBrackets(String hem){
+public static String removeBrackets(String hem){
         TreeMap<String, Integer > map = new TreeMap<>();
         StringBuilder sb = new StringBuilder(hem);
         Stack<Integer> stack = new Stack<>();
@@ -66,14 +66,28 @@ public class Zadatak3 {
                 stack.push(i);
             }
             else if (sb.charAt(i) == ')'){
-                int x = 1;
-                if (Character.isDigit(sb.charAt(i+1))){
-                    x = Character.getNumericValue(sb.charAt(i+1));
-                }
                 int openBracket = stack.pop();
-                String betweenBracker = sb.substring(openBracket + 1, i);
-//                System.out.println("between brackets : " + betweenBracker);
-                sb.replace(openBracket, i + 2, betweenBracker.repeat(x));
+                if ( i < sb.length() -1 && Character.isDigit(sb.charAt(i+1))){
+                    StringBuilder number = new StringBuilder();
+                    number.append(sb.charAt(i + 1));
+                    for (int j = i+2; j < sb.length(); j++) {
+                        if (Character.isDigit(sb.charAt(j))){
+                            number.append(sb.charAt(j));
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    int x = Integer.parseInt(number.toString());
+                    String betweenBracker = sb.substring(openBracket + 1, i);
+                    sb.replace(openBracket, i + number.length() + 1, betweenBracker.repeat(x));
+                }
+                else {
+                    sb.deleteCharAt(i);
+                    sb.deleteCharAt(openBracket);
+                    i-=2;
+                }
+
             }
         }
         System.out.println(sb.toString());
